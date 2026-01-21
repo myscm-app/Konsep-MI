@@ -92,6 +92,9 @@
                     <button onclick="switchTab('scm')" id="btn-scm" class="tab-btn px-4 py-2 md:px-6 md:py-2.5 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600 hover:bg-slate-200">
                         Model SCM & Akuntansi
                     </button>
+                    <button onclick="switchTab('analysis')" id="btn-analysis" class="tab-btn px-4 py-2 md:px-6 md:py-2.5 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600 hover:bg-slate-200">
+                        Analisa & Costing
+                    </button>
                     <button onclick="switchTab('action')" id="btn-action" class="tab-btn px-4 py-2 md:px-6 md:py-2.5 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600 hover:bg-slate-200">
                         Rencana Aksi
                     </button>
@@ -288,6 +291,184 @@
             </div>
         </div>
 
+        <!-- TAB: ANALISA & COSTING (UPDATED) -->
+        <div id="tab-analysis" class="tab-content fade-in">
+            <div class="space-y-8">
+                
+                <!-- 1. Cost & Benefit Structure -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                        <i data-lucide="calculator" class="mr-2 text-orange-500 w-5 h-5"></i> Struktur Biaya & Keuntungan
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Sisi Principal -->
+                        <div class="border rounded-lg p-4 bg-slate-50">
+                            <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">Mortar Indonesia (Principal)</h4>
+                            <div class="space-y-2 text-sm">
+                                <p class="font-semibold text-slate-600">Biaya yang Ditanggung:</p>
+                                <ul class="list-disc list-inside text-slate-500 ml-2 mb-4">
+                                    <li>Biaya Logistik (Pabrik ke Gudang Distributor).</li>
+                                    <li>Biaya Modal Persediaan (Inventory Cost).</li>
+                                    <li>Risiko Barang Rusak saat Pengiriman Inbound.</li>
+                                </ul>
+                                <p class="font-semibold text-green-600">Benefit:</p>
+                                <ul class="list-disc list-inside text-slate-500 ml-2">
+                                    <li>Penetrasi pasar lebih cepat (Availability).</li>
+                                    <li>Kontrol harga pasar lebih stabil.</li>
+                                    <li>Efisiensi kiriman (Full Truck Load vs LTL).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Sisi Distributor -->
+                        <div class="border rounded-lg p-4 bg-slate-50">
+                            <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">Distributor (Mitra)</h4>
+                            <div class="space-y-2 text-sm">
+                                <p class="font-semibold text-slate-600">Biaya yang Ditanggung:</p>
+                                <ul class="list-disc list-inside text-slate-500 ml-2 mb-4">
+                                    <li>Biaya Sewa/Space Gudang.</li>
+                                    <li>Biaya Handling (Bongkar Muat & Susun).</li>
+                                    <li>Biaya Kirim ke Toko Retail (Last Mile).</li>
+                                    <li>Biaya Admin Pelaporan Stok Harian.</li>
+                                </ul>
+                                <p class="font-semibold text-green-600">Benefit:</p>
+                                <ul class="list-disc list-inside text-slate-500 ml-2">
+                                    <li><span class="font-bold">NOL MODAL KERJA</span> untuk stok.</li>
+                                    <li>Tidak ada bunga bank (Cashflow sehat).</li>
+                                    <li>Fokus modal hanya untuk operasional kirim.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Simulation Table -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                        <i data-lucide="coins" class="mr-2 text-green-600 w-5 h-5"></i> Simulasi Margin Distributor (Per Sak)
+                    </h3>
+                    <p class="text-sm text-slate-500 mb-6">Ilustrasi keuntungan distributor tanpa mengeluarkan modal pembelian stok.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-slate-800 text-white uppercase font-bold text-xs">
+                                <tr>
+                                    <th class="px-6 py-3">Komponen Harga</th>
+                                    <th class="px-6 py-3 text-right">Nilai (Rp)</th>
+                                    <th class="px-6 py-3">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="bg-green-50">
+                                    <td class="px-6 py-3 font-medium">Harga Jual ke Toko (HJT)</td>
+                                    <td class="px-6 py-3 text-right font-bold">55.000</td>
+                                    <td class="px-6 py-3 text-xs text-slate-500">Harga pasar retail area Lampung</td>
+                                </tr>
+                                <tr class="bg-red-50">
+                                    <td class="px-6 py-3 font-medium">Harga Konsinyasi (Modal)</td>
+                                    <td class="px-6 py-3 text-right text-red-600">(50.000)</td>
+                                    <td class="px-6 py-3 text-xs text-slate-500">Dibayar HANYA saat barang laku</td>
+                                </tr>
+                                <tr class="font-bold bg-slate-100">
+                                    <td class="px-6 py-3">Gross Margin</td>
+                                    <td class="px-6 py-3 text-right">5.000</td>
+                                    <td class="px-6 py-3 text-xs text-slate-500">~10% Margin Kotor</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-3 pl-8 text-slate-500">- Biaya Handling & Gudang</td>
+                                    <td class="px-6 py-3 text-right text-slate-500">(500)</td>
+                                    <td class="px-6 py-3 text-xs text-slate-500">Est. cost per sak</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-3 pl-8 text-slate-500">- Biaya Kirim ke Toko</td>
+                                    <td class="px-6 py-3 text-right text-slate-500">(1.500)</td>
+                                    <td class="px-6 py-3 text-xs text-slate-500">Est. cost last mile</td>
+                                </tr>
+                                <tr class="font-bold bg-green-100 text-green-900 border-t-2 border-green-200">
+                                    <td class="px-6 py-4">NET PROFIT</td>
+                                    <td class="px-6 py-4 text-right text-lg">Rp 3.000</td>
+                                    <td class="px-6 py-4 text-xs font-semibold">Profit murni tanpa investasi stok</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+                        <span class="font-bold">Insight:</span> Dengan skema ini, Return on Investment (ROI) distributor secara teknis adalah <strong>Tak Terhingga (Infinite)</strong> untuk inventory, karena penyebut (modal investasi stok) adalah nol.
+                    </div>
+                </div>
+
+                <!-- 3. Risk Analysis (Kept from previous version) -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-red-50 p-6 rounded-xl border border-red-100">
+                        <h3 class="text-lg font-bold text-red-900 mb-4 flex items-center">
+                            <i data-lucide="alert-triangle" class="mr-2 w-5 h-5"></i> Risiko Principal (MKI)
+                        </h3>
+                        <ul class="space-y-3 text-sm text-red-800">
+                            <li class="flex items-start">
+                                <span class="font-bold mr-2">•</span>
+                                <div>
+                                    <span class="font-bold">Stok Mati (Aging):</span> Barang tidak laku di gudang distributor.
+                                    <br><span class="text-xs text-red-600 italic">Mitigasi: Review per 3 bulan, tarik barang jika slow moving.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="font-bold mr-2">•</span>
+                                <div>
+                                    <span class="font-bold">Selisih Stok:</span> Kehilangan fisik di gudang pihak ke-2.
+                                    <br><span class="text-xs text-red-600 italic">Mitigasi: Klausul PKS "Selisih Kurang = Beli Putus".</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                        <h3 class="text-lg font-bold text-blue-900 mb-4 flex items-center">
+                            <i data-lucide="shield-alert" class="mr-2 w-5 h-5"></i> Risiko Distributor
+                        </h3>
+                        <ul class="space-y-3 text-sm text-blue-800">
+                            <li class="flex items-start">
+                                <span class="font-bold mr-2">•</span>
+                                <div>
+                                    <span class="font-bold">Space Gudang:</span> Terpakai untuk barang yang belum tentu laku (Opportunity Cost).
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="font-bold mr-2">•</span>
+                                <div>
+                                    <span class="font-bold">Tanggung Jawab Fisik:</span> Kerusakan akibat handling di gudang menjadi beban distributor.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Final Recommendation -->
+                <div class="bg-green-50 p-6 rounded-xl border-l-4 border-green-600 shadow-sm">
+                    <h3 class="text-xl font-bold text-green-900 mb-2 flex items-center">
+                        <i data-lucide="thumbs-up" class="mr-2 w-6 h-6"></i> Rekomendasi: JALANKAN (GO)
+                    </h3>
+                    <p class="text-green-800 mb-4">
+                        Mengingat tujuan strategis adalah penetrasi pasar area baru (Lampung, AP3, AP4), risiko dapat dikelola dengan syarat ketat:
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white p-3 rounded border border-green-200 text-green-900">
+                            <span class="font-bold block mb-1">1. Limit Plafon</span>
+                            Batasi nilai konsinyasi (misal Max Rp 200 Juta per titik) agar eksposur risiko terkendali.
+                        </div>
+                        <div class="bg-white p-3 rounded border border-green-200 text-green-900">
+                            <span class="font-bold block mb-1">2. Cut-Off Date</span>
+                            Wajib lapor penjualan tiap hari Jumat, tagihan terbit Senin, bayar max Rabu.
+                        </div>
+                        <div class="bg-white p-3 rounded border border-green-200 text-green-900">
+                            <span class="font-bold block mb-1">3. Joint Audit</span>
+                            Wajib Stock Opname fisik bersama tim Sales/Finance MKI setiap akhir bulan.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <!-- TAB: ACTION PLAN -->
         <div id="tab-action" class="tab-content fade-in">
             <div class="grid md:grid-cols-3 gap-6">
@@ -397,13 +578,14 @@
             document.getElementById('tab-' + tabName).classList.add('active');
 
             // Reset all buttons styling
-            const buttons = ['overview', 'scm', 'action'];
+            const buttons = ['overview', 'scm', 'analysis', 'action'];
             buttons.forEach(btn => {
                 const btnEl = document.getElementById('btn-' + btn);
                 if (btn === tabName) {
                     // Active State
                     btnEl.className = "tab-btn px-4 py-2 md:px-6 md:py-2.5 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-900 text-white shadow-md";
                     if (btn === 'scm') btnEl.classList.replace('bg-slate-900', 'bg-orange-600');
+                    if (btn === 'analysis') btnEl.classList.replace('bg-slate-900', 'bg-purple-600');
                     if (btn === 'action') btnEl.classList.replace('bg-slate-900', 'bg-blue-700');
                 } else {
                     // Inactive State
@@ -436,12 +618,15 @@
             
             const overview = document.getElementById('tab-overview');
             const scm = document.getElementById('tab-scm');
+            const analysis = document.getElementById('tab-analysis');
             
             const break1 = pageBreak.cloneNode(true);
             const break2 = pageBreak.cloneNode(true);
+            const break3 = pageBreak.cloneNode(true);
             
             overview.after(break1);
             scm.after(break2);
+            analysis.after(break3);
 
             // 3. Handle Watermark
             watermark.classList.remove('hidden');
@@ -485,6 +670,7 @@
                 // Remove breaks
                 break1.remove();
                 break2.remove();
+                break3.remove();
 
                 watermark.classList.add('hidden');
                 if(tabNav) tabNav.style.display = 'flex';
