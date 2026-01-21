@@ -29,13 +29,20 @@
             background-color: #cbd5e1;
             border-radius: 4px;
         }
+        /* Print Specifics */
+        .html2pdf__page-break {
+            height: 0;
+            page-break-after: always;
+            margin: 0;
+            border: 0;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen relative">
 
-    <!-- Watermark Element (Hidden by default) -->
-    <div id="watermark" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 pointer-events-none z-[9999] hidden">
-        <span class="text-[100px] md:text-[150px] font-black text-slate-400/20 uppercase tracking-widest border-[10px] border-slate-400/20 p-10 rounded-3xl whitespace-nowrap">
+    <!-- Watermark Element (Hidden by default, reduced opacity for readability) -->
+    <div id="watermark" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 pointer-events-none z-0 hidden">
+        <span class="text-[100px] md:text-[150px] font-black text-slate-300/10 uppercase tracking-widest border-[10px] border-slate-300/10 p-10 rounded-3xl whitespace-nowrap">
             DRAFT
         </span>
     </div>
@@ -94,7 +101,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <main class="flex-grow max-w-6xl mx-auto px-4 py-6 md:py-10 w-full">
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-6 md:py-10 w-full relative z-10">
         
         <!-- TAB: OVERVIEW -->
         <div id="tab-overview" class="tab-content active fade-in">
@@ -417,37 +424,77 @@
             const activeTabId = activeTab ? activeTab.id : null;
 
             // 1. Prepare DOM: Show ALL tabs (so PDF contains full proposal)
-            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'block');
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(el => {
+                el.style.display = 'block';
+                el.classList.add('mb-8'); // Add spacing
+            });
 
-            // 2. Show Watermark
-            watermark.style.display = 'block';
+            // 2. Insert explicit page breaks
+            const pageBreak = document.createElement('div');
+            pageBreak.className = 'html2pdf__page-break';
+            
+            const overview = document.getElementById('tab-overview');
+            const scm = document.getElementById('tab-scm');
+            
+            const break1 = pageBreak.cloneNode(true);
+            const break2 = pageBreak.cloneNode(true);
+            
+            overview.after(break1);
+            scm.after(break2);
 
-            // 3. Hide non-printable controls
+            // 3. Handle Watermark
+            watermark.classList.remove('hidden');
+
+            // 4. Hide non-printable controls
             if(tabNav) tabNav.style.display = 'none';
             if(downloadBtn) downloadBtn.style.display = 'none';
             
-            // 4. Unstick header (prevents glitch in PDF)
+            // Unstick header for PDF
             header.classList.remove('sticky');
+            header.classList.add('static');
+
+            // 5. CRITICAL: Force Desktop Width
+            // This prevents the PDF from looking like a mobile phone screenshot
+            const originalWidth = element.style.width;
+            element.style.width = '1200px'; 
 
             // PDF Options
             const opt = {
-                margin:       0,
+                margin:       [0.2, 0.2, 0.2, 0.2],
                 filename:     'Proposal_Konsinyasi_MKI_DRAFT.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    scrollY: 0,
+                    windowWidth: 1200 // Simulate desktop width
+                },
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
-            // 5. Generate and Save
+            // 6. Generate and Save
             html2pdf().set(opt).from(element).save().then(() => {
-                // 6. Restore Original State
-                document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+                // 7. Restore Original State
+                tabs.forEach(el => {
+                    el.style.display = 'none';
+                    el.classList.remove('mb-8');
+                });
                 if (activeTabId) document.getElementById(activeTabId).style.display = 'block';
                 
-                watermark.style.display = 'none';
+                // Remove breaks
+                break1.remove();
+                break2.remove();
+
+                watermark.classList.add('hidden');
                 if(tabNav) tabNav.style.display = 'flex';
-                if(downloadBtn) downloadBtn.style.display = 'flex'; // Restore button
+                if(downloadBtn) downloadBtn.style.display = 'flex'; 
+                
                 header.classList.add('sticky');
+                header.classList.remove('static');
+                
+                // Restore width
+                element.style.width = originalWidth;
             });
         }
     </script>
